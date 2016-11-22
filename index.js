@@ -38,6 +38,16 @@ const questions = [
   },
   {
     type: 'confirm',
+    name: 'plugins',
+    message: 'Install Default Plugins?'
+  },
+  {
+    type: 'confirm',
+    name: 'theme',
+    message: 'Install Flex With Benefits?'
+  },
+  {
+    type: 'confirm',
     name: 'happy',
     message: 'Happy?'
   },
@@ -53,6 +63,8 @@ inquirer.prompt(questions).then(function (answers) {
     wptitle: answers.wptitle,
     wpurl: answers.dirname,
     wprename: answers.dirname,
+    wpplugins: answers.plugins,
+    wptheme: answers.theme,
   }
 
   // Clone thrive-box
@@ -107,6 +119,34 @@ inquirer.prompt(questions).then(function (answers) {
     }
 
   })
+
+  if(!answers.plugins){
+    try {
+      let changedFiles = replace.sync({
+        files: configFile,
+        replace: `plugins: true`,
+        with: `plugins: false`
+      })
+      console.log(chalk.cyan('Updated file:', changedFiles.join(', ')))
+    }
+    catch (error) {
+      console.error(chalk.bgRed('Error occurred:', error))
+    }
+  }
+
+  if(!answers.theme){
+    try {
+      let changedFiles = replace.sync({
+        files: configFile,
+        replace: `theme: true`,
+        with: `theme: false`
+      })
+      console.log(chalk.cyan('Updated file:', changedFiles.join(', ')))
+    }
+    catch (error) {
+      console.error(chalk.bgRed('Error occurred:', error))
+    }
+  }
 
   // Vagrant Up
   console.log(chalk.bgCyan(`Booting ${config.dirname} box...`))
