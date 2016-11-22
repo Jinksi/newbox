@@ -48,6 +48,11 @@ const questions = [
   },
   {
     type: 'confirm',
+    name: 'updraft',
+    message: 'Are you importing an existing site with Updraft?'
+  },
+  {
+    type: 'confirm',
     name: 'happy',
     message: 'Happy?'
   },
@@ -155,7 +160,8 @@ inquirer.prompt(questions).then(function (answers) {
 
   // Run Setup!
   console.log(chalk.bgCyan(`Setting Up Wordpress...`))
-  spawn.sync('vagrant', ['ssh', '-c', 'cd /var/www && bash setup.sh'], { stdio: 'inherit' })
+  const setupCMD = answers.updraft ? 'cd /var/www && bash setup.sh && wp plugin install updraftplus --activate' : 'cd /var/www && bash setup.sh'
+  spawn.sync('vagrant', ['ssh', '-c', setupCMD], { stdio: 'inherit' })
 
   console.log(chalk.bgCyan('Done'))
 })
