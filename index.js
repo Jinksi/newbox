@@ -5,6 +5,23 @@ const spawn = require('cross-spawn')
 const chalk = require('chalk')
 const replace = require('replace-in-file')
 
+const plugins = [
+  { name: 'WooCommerce', value: 'woocommerce'},
+  { name: 'ACF', value: 'https://github.com/wp-premium/advanced-custom-fields-pro/archive/master.zip'},
+  { name: 'Gravity Forms', value: 'https://github.com/wp-premium/gravityforms/archive/master.zip'},
+  { name: 'Wordpress SEO', value: 'wordpress-seo'},
+  { name: 'iThemes Security', value: 'better-wp-security'},
+  { name: 'Updraft Plus', value: 'updraftplus'},
+  { name: 'WP-Sync-DB', value: 'https://github.com/wp-sync-db/wp-sync-db/archive/master.zip'},
+  { name: 'Intuitive CPO', value: 'intuitive-custom-post-order'},
+  { name: 'SVG Support', value: 'svg-support'},
+  { name: 'Disable WordPress updates', value: 'disable-wordpress-updates'},
+  { name: 'Password Protected', value: 'password-protected'},
+  { name: 'Wp Instagram Widget', value: 'wp-instagram-widget'},
+  { name: 'Simply Show Hooks', value: 'simply-show-hooks'},
+  { name: 'Tree Page View', value: 'cms-tree-page-view'},
+]
+
 const questions = [
   {
     type: 'input',
@@ -37,19 +54,16 @@ const questions = [
     validate: input => input.length > 1
   },
   {
-    type: 'confirm',
+    type: 'checkbox',
     name: 'plugins',
-    message: 'Install Default Plugins?'
+    message: 'Plugins',
+    default: plugins.map(plugin => plugin.value),
+    choices: plugins,
   },
   {
     type: 'confirm',
     name: 'theme',
     message: 'Install Flex With Benefits?'
-  },
-  {
-    type: 'confirm',
-    name: 'updraft',
-    message: 'Are you importing an existing site with Updraft?'
   },
   {
     type: 'confirm',
@@ -113,7 +127,6 @@ inquirer.prompt(questions).then(function (answers) {
           replace: `${name}: ${original}`,
           with: `${name}: ${config[`wp${name}`]}`
         })
-        console.log(chalk.cyan('Updated file:', changedFiles.join(', ')))
       }
       catch (error) {
         console.error(chalk.bgRed('Error occurred:', error))
@@ -125,12 +138,15 @@ inquirer.prompt(questions).then(function (answers) {
 
   })
 
-  if(!answers.plugins){
+  if(answers.plugins.length){
     try {
+      const pluginsStr = answers.plugins.map(plugin => {
+        return `  - ${plugin}`
+      })
       let changedFiles = replace.sync({
         files: configFile,
-        replace: `plugins: true`,
-        with: `plugins: false`
+        replace: `plugins_inactive:`,
+        with: `plugins_inactive: \n${pluginsStr.join('\n')}`
       })
       console.log(chalk.cyan('Updated file:', changedFiles.join(', ')))
     }
@@ -139,6 +155,7 @@ inquirer.prompt(questions).then(function (answers) {
     }
   }
 
+
   if(!answers.theme){
     try {
       let changedFiles = replace.sync({
@@ -146,7 +163,6 @@ inquirer.prompt(questions).then(function (answers) {
         replace: `theme: true`,
         with: `theme: false`
       })
-      console.log(chalk.cyan('Updated file:', changedFiles.join(', ')))
     }
     catch (error) {
       console.error(chalk.bgRed('Error occurred:', error))
@@ -160,7 +176,7 @@ inquirer.prompt(questions).then(function (answers) {
 
   // Run Setup!
   console.log(chalk.bgCyan(`Setting Up Wordpress...`))
-  const setupCMD = answers.updraft ? 'cd /var/www && bash setup.sh && wp plugin install updraftplus --activate' : 'cd /var/www && bash setup.sh'
+  const setupCMD = 'cd /var/www && bash setup.sh'
   spawn.sync('vagrant', ['ssh', '-c', setupCMD], { stdio: 'inherit' })
 
   console.log(chalk.bgCyan('Done'))
