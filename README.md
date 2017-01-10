@@ -1,5 +1,5 @@
 # newbox
-NPM CLI tool for creating a new ThriveBox
+NPM CLI tool for creating a new [Thrive Box](https://github.com/Jinksi/thrive-box)
 
 ## Installation
 `npm install -g newbox`
