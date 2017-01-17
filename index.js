@@ -26,6 +26,11 @@ const plugins = [
   { name: 'Regenerate Thumbnails', value: 'regenerate-thumbnails'},
 ]
 
+const themes = [
+  { name: 'Flex With Benefits', value: 'https://github.com/Jinksi/flex-with-benefits/archive/master.zip'},
+  { name: 'Flex With Benefits - Babelify', value: 'https://github.com/Jinksi/flex-with-benefits/archive/babelify.zip'},
+]
+
 const questions = [
   {
     type: 'input',
@@ -65,9 +70,10 @@ const questions = [
     choices: plugins,
   },
   {
-    type: 'confirm',
+    type: 'list',
     name: 'theme',
-    message: 'Install Flex With Benefits?'
+    message: 'Choose a theme...',
+    choices: themes
   },
   {
     type: 'confirm',
@@ -160,12 +166,12 @@ inquirer.prompt(questions).then(function (answers) {
   }
 
 
-  if(!answers.theme){
+  if(answers.theme){
     try {
       let changedFiles = replace.sync({
         files: configFile,
-        replace: `theme: true`,
-        with: `theme: false`
+        replace: `url: "https://github.com/Jinksi/flex-with-benefits/archive/master.zip"`,
+        with: `url: "${answers.theme}"`
       })
     }
     catch (error) {
