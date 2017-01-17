@@ -22,6 +22,8 @@ const plugins = [
   { name: 'Wp Instagram Widget', value: 'wp-instagram-widget'},
   { name: 'Simply Show Hooks', value: 'simply-show-hooks'},
   { name: 'Tree Page View', value: 'cms-tree-page-view'},
+  { name: 'Duplicate Post', value: 'duplicate-post'},
+  { name: 'WP Pagenavi', value: 'wp-pagenavi'},
 ]
 
 const questions = [
