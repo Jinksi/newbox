@@ -7,6 +7,7 @@ const replace = require('replace-in-file')
 
 const plugins = [
   { name: 'WooCommerce', value: 'woocommerce'},
+  { name: 'Woo Google analytics tracking', value: 'woocommerce-google-analytics-integration'},
   { name: 'ACF', value: 'https://github.com/wp-premium/advanced-custom-fields-pro/archive/master.zip'},
   { name: 'Gravity Forms', value: 'https://github.com/wp-premium/gravityforms/archive/master.zip'},
   { name: 'Wordpress SEO', value: 'wordpress-seo'},
