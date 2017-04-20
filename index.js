@@ -25,6 +25,7 @@ const plugins = [
   { name: 'Tree Page View', value: 'cms-tree-page-view'},
   { name: 'NS Featured Posts', value: 'ns-featured-posts'},
   { name: 'Regenerate Thumbnails', value: 'regenerate-thumbnails'},
+  { name: 'PNG to JPG', value: 'png-to-jpg'},
 ]
 
 const themes = [
